@@ -1,0 +1,125 @@
+/* line 51, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+code {
+  display: block;
+  margin-bottom: 25px;
+}
+
+/* line 55, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.input.is-danger {
+  border: 1px solid #c60f13;
+}
+
+/* line 58, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.help.is-danger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  position: absolute;
+  top: -10px;
+  left: 5px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+  padding: 5px 15px;
+  color: #fff;
+  background-color: #c60f13;
+  border-color: #f5c6cb;
+}
+
+/* line 38, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.help.is-danger:after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 10px solid #c60f13;
+  position: absolute;
+  bottom: -10px;
+  left: 30px;
+}
+
+/* line 62, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.input-wrap {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+/* line 65, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.input-wrap input {
+  margin: 0 0 15px;
+}
+
+/* line 69, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.input-wrap .button {
+  margin-bottom: 0;
+}
+
+/* line 74, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+section {
+  margin: 50px 0;
+}
+
+/* line 77, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.hovering {
+  background: #c60f13;
+}
+
+/* line 82, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.remove-form-element ul {
+  list-style: none;
+  margin-left: 0;
+}
+
+/* line 86, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.remove-form-element li {
+  padding: 5px;
+  border: 1px solid transparent;
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+/* line 92, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.remove-form-element li:hover {
+  border: 1px solid #c60f13;
+}
+
+/* line 99, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.form-element-list {
+  padding: 0;
+}
+
+/* line 104, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.form-element-list ul {
+  margin: 0;
+}
+
+/* line 107, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.form-element-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+/* line 114, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.direction-buttons .button {
+  margin: 0;
+}
+
+/* line 124, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+[v-cloak] {
+  display: none;
+}
+
+/* line 128, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+/* line 132, /Users/jeff/Documents/form-builder/custom/scss/app.scss */
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+/*# sourceMappingURL=../css/app.map */

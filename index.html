@@ -1,0 +1,316 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Forms</title>
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+    <div id="app" v-cloak>
+        <section>
+            <div class="row">
+                <div class="medium-8 columns">
+                    <div class="callout">
+                        <h5>Your Custom Form</h5>
+                        <form action="#" data-vv-scope="customInputs">
+                            <div class="row" id="form-container">
+                                <custom-input v-for="(elem, index) in formElements" :type="elem.type" :value="elem.value" :label="elem.label" :placeholder="elem.placeholder" :options="elem.options" :key="'input'+index" :index="index" :required="elem.required" :columns="elem.columns" :columnClass="elem.columnClass" ref="code"></custom-input>
+                            </div>
+                            <div v-if="formElements.length">
+                                <div class="button" v-on:click="validateCustomForm">Test Validation</div>
+                                <h6>Output:</h6>
+                                <code>{{output}}</code>
+                                <h6>Schema:</h6>
+                                <code>{{formElements}}</code>
+                                <h6>HTML:</h6>
+                                <code>
+                                    {{template}}
+                                </code>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="medium-4 columns">
+                    <div class="callout">
+                        <h5>Add Form Elements</h5>
+                        <div>
+                            <form action="" data-vv-scope="addField">
+                                <select name="" id="" v-model="fieldType">
+                                    <option value="" disabled>Choose your field type</option>
+                                    <option value="text">Text</option>
+                                    <option value="number">Number</option>
+                                    <option value="checkbox">Checkbox - Single</option>
+                                    <option value="checkbox-group">Checkbox - Group</option>
+                                    <option value="textarea">Textarea</option>
+                                    <option value="select">Select Dropdown</option>
+                                    <option value="radio">Radio Buttons</option>
+                                    <option value="tel">Phone</option>
+                                    <option value="email">Email</option>
+                                    <option value="section-header">Section Header</option>
+                                    <option value="separator">Separator</option>
+                                </select>
+                                <div v-if="fieldType == 'text' || fieldType == 'number' || fieldType == 'textarea' || fieldType == 'tel' || fieldType == 'email'">
+                                    <h6 v-if="fieldType == 'tel'">Add a custom phone field</h6>
+                                    <h6 v-if="fieldType != 'tel'">Add a custom {{fieldType}} field</h6>
+                                    <question v-model="question"></question>
+                                    <placeholder v-model="placeholder"></placeholder>
+                                    <required v-model="required"></required>
+                                    <columns v-model="columns"></columns>
+                                    <save-buttons></save-buttons>
+                                </div>
+                                <div v-if="fieldType == 'checkbox'">
+                                    <h6>Add a single checkbox</h6>
+                                    <question v-model="question"></question>
+                                    <required v-model="required"></required>
+                                    <columns v-model="columns"></columns>
+                                    <save-buttons></save-buttons>
+                                </div>
+                                <div v-if="fieldType == 'select'" class="input-wrap">
+                                    <h6>Add a {{fieldType}} field</h6>
+                                    <question v-model="question"></question>
+                                    <placeholder v-model="placeholder"></placeholder>
+                                    <div v-for="(opt, i) in options" class="input-wrap">
+                                        <option-input v-model="opt.value" :index="i"></option-input>
+                                        <option-buttons :index="i" :optiontype="'radio'"></option-buttons>
+                                    </div>
+                                    <add-option></add-option>
+                                    <required v-model="required"></required>
+                                    <columns v-model="columns"></columns>
+                                    <save-buttons></save-buttons>
+                                </div>
+                                <div v-if="fieldType == 'checkbox-group'" class="input-wrap">
+                                    <h6>Add a checkbox group</h6>                                    
+                                    <question v-model="question"></question>
+                                    <div v-for="(opt, i) in checkboxOptions" class="input-wrap">
+                                        <option-input v-model="opt.name" :index="i"></option-input>
+                                        <option-buttons :index="i" :optiontype="'checkbox'"></option-buttons>
+                                    </div>
+                                    <add-checkbox-option></add-checkbox-option>
+                                    <required v-model="required"></required>
+                                    <columns v-model="columns"></columns>
+                                    <save-buttons></save-buttons>
+                                </div>
+                                <div v-if="fieldType == 'radio'" class="input-wrap">
+                                    <h6>Add a custom radio field</h6>
+                                    <question v-model="question"></question>
+                                    <div v-for="(opt, i) in options" class="input-wrap">
+                                        <option-input v-model="opt.name" :index="i"></option-input>
+                                        <option-buttons :index="i" :optiontype="'radio'"></option-buttons>
+                                    </div>
+                                    <add-option></add-option>
+                                    <required v-model="required"></required>
+                                    <columns v-model="columns"></columns>
+                                    <save-buttons></save-buttons>
+                                </div>
+                                <div v-if="fieldType == 'separator'" class="input-wrap">
+                                    <h6>Add a separator</h6>
+                                    <save-buttons></save-buttons>
+                                </div>
+                                <div v-if="fieldType == 'section-header'" class="input-wrap">
+                                    <h6>Add a section header</h6>
+                                    <!-- <question v-model="question"></question> -->
+                                    <section-header v-model="question"></section-header>
+                                    <save-buttons></save-buttons>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div v-if="!showChangeOrder">
+                        <div v-if="!showRemoveFormElements && !showAddFormElements && formElements.length">
+                            <div class="button alert hollow" v-on:click="showRemoveFormElements = true">Remove Form Element</div>
+                        </div>
+                        <div v-if="formElements.length && showRemoveFormElements && !showConfirm" class="remove-form-element">
+                            <h5>Remove Form Element</h5>
+                            <ul>
+                                <li v-for="(elem, i) in formElements" v-on:mouseover="mouseOver(i)" v-on:mouseleave="mouseLeave()" v-on:click="confirmRemove(i)" :key="elem.label">
+                                    <span v-if="elem.type != 'separator' && elem.type">{{i+1}} - {{elem.label}}</span>
+                                    <span v-if="elem.type == 'separator'">{{i+1}} - Separator</span>
+                                    <!-- <span v-if="elem.type == 'section-header'">{{i+1}} - {{elem.label}}</span> -->
+                                </li>
+                            </ul>
+                            <div class="button hollow" v-on:click="showRemoveFormElements = false">Cancel</div>
+                        </div>
+                        <div v-if="showConfirm">
+                            <h6>Remove this form element?</h6>
+                            <div class="remove-buttons">
+                                <div class="button hollow" v-on:click="cancelConfirm()">Cancel</div>
+                                <div class="button hollow alert" v-on:click="removeFormElement(itemToRemove)">Remove</div>
+                            </div>
+                        </div>
+                    </div>  
+                    <div v-if="!showRemoveFormElements">
+                        <div v-if="!showChangeOrder && formElements.length > 1">
+                            <div class="button info hollow" v-on:click="showChangeOrder = true">Change Order</div>
+                        </div>
+                        <div v-if="showChangeOrder && formElements.length > 1" class="callout">
+                            <h5>Change Order</h5>
+                            <div class="form-element-list">
+                                <ul>
+                                    <li v-for="(elem, i) in formElements" :key="elem.label">
+                                        <span v-if="elem.type == 'separator'">Separator</span>
+                                        <span v-if="elem.type != 'separator'">{{elem.label}}</span>
+                                        <div class="direction-buttons">
+                                            <span class="button info hollow" v-on:click="changeOrder('up', i)">Up</span>
+                                            <span class="button info hollow" v-on:click="changeOrder('down', i)">Down</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="button hollow success" v-on:click="showChangeOrder = false">Done</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+
+
+    <!-- COMPONENT TEMPLATE-->
+    <script type="text/x-template" id="form-element">
+        <div class="input-wrap columns" :class="[{'hovering': this.$parent.hoverIndex == index}, 'medium-'+columns]">
+            <div v-if="type == 'text' || type == 'number'">
+                <label>{{label}} <span v-if="required">*</span></label>
+
+                <input 
+                    v-if="!required" 
+                    :type="type" 
+                    v-model="theValue"
+                    :name="label"
+                    :placeholder="placeholder"
+                >
+                <input 
+                    v-if="required"  
+                    :type="type" 
+                    v-model="theValue"
+                    :name="label"
+                    :placeholder="placeholder"
+                    v-validate="'required'"
+                    :class="{'input': true, 'is-danger': errors.has('customInputs.'+label)}"
+                    :key="label+index"
+                >
+                <span v-if="required" v-show="errors.has('customInputs.'+label)" class="help is-danger">{{ errors.first('customInputs.'+label) }}</span>
+            </div>
+            <div v-if="type == 'select'"> 
+                <label>{{label}} <span v-if="required">*</span></label>
+                <select v-if="!required" v-model="theValue" :name="label">
+                    <option :value="''" disabled>{{placeholder}}</option>
+                    <option v-for="opt in options" :name="opt.name" :value="opt.value">{{opt.name}}</option>
+                </select>
+                <select v-if="required" v-model="theValue" :name="label" v-validate="{ required: true, included: options.map(o => o.value) }"
+                    :class="{'input': true, 'is-danger': errors.has('customInputs.'+label)}"
+                    >
+                    <option :value="placeholder" disabled>{{placeholder}}</option>
+                    <option v-for="opt in options" :name="opt.name" :value="opt.value">{{opt.name}}</option>
+                </select>
+                <span v-if="required" v-show="errors.has('customInputs.'+label)" class="help is-danger">{{ errors.first('customInputs.'+label) }}</span>
+            </div>
+
+            <div v-if="type == 'checkbox'">
+                <label>{{label}} <span v-if="required">*</span></label>
+                <input v-if="!required" :type="type" :name="label" v-model="theValue">
+                <input v-if="required" :type="type" :name="label" v-model="theValue" v-validate="{required: true}">
+                <span v-if="required" v-show="errors.has('customInputs.'+label)" class="help is-danger">{{ errors.first('customInputs.'+label) }}</span>
+            </div>
+            <div v-if="type == 'checkbox-group'">
+                <label>{{label}} <span v-if="required">*</span></label>
+                <div v-for="opt in options">
+                    <label>{{opt.name}}</label>
+                    <input v-if="!required" type="checkbox" :name="label" :value="opt.name" v-model="opt.value" v-on:change="getCheckboxValues(options)">
+                    <input v-if="required" type="checkbox" :name="label" :value="opt.name" v-model="opt.value" v-on:change="getCheckboxValues(options)" v-validate={required:true}>
+                </div>
+                <span v-if="required" v-show="errors.has('customInputs.'+label)" class="help is-danger">{{ errors.first('customInputs.'+label) }}</span>
+            </div>
+            <div v-if="type == 'radio'">
+                <label>{{label}} <span v-if="required">*</span></label>
+                <div v-for="opt in options">
+                    <label>{{opt.name}}</label>
+                    <input v-if="!required" :type="type" :name="label" :value="opt.name" v-model="theValue">
+                    <input v-if="required" :type="type" :name="label" :value="opt.name" v-model="theValue" v-validate="{ required: true, included: options.map(o => o.value) }">
+                    </div>
+                <span v-if="required" v-show="errors.has('customInputs.'+label)" class="help is-danger">{{ errors.first('customInputs.'+label) }}</span>
+            </div>
+            <div v-if="type == 'textarea'">
+                <label>{{label}} <span v-if="required">*</span></label>
+                <textarea v-if="!required" :name="label" v-model="theValue" :placeholder="placeholder"></textarea>
+                <textarea v-if="required" :name="label" v-model="theValue" :placeholder="placeholder" v-validate="{required: true}"
+                    :class="{'input': true, 'is-danger': errors.has('customInputs.'+label)}"
+                >
+                </textarea>
+                <span v-if="required" v-show="errors.has('customInputs.'+label)" class="help is-danger">{{ errors.first('customInputs.'+label) }}</span>
+            </div>
+            <div v-if="type == 'tel'">
+                <label>{{label}} <span v-if="required">*</span></label>
+                <input 
+                    v-if="!required" 
+                    :type="type" 
+                    v-model="theValue"
+                    :name="label"
+                    :placeholder="placeholder"
+                >
+                <input 
+                    v-if="required"  
+                    :type="type" 
+                    v-model="theValue"
+                    :name="label"
+                    :placeholder="placeholder"
+                    v-validate="'required|numeric'"
+                    :class="{'input': true, 'is-danger': errors.has('customInputs.'+label)}"
+                    :key="label+index"
+                >
+                <span v-if="required" v-show="errors.has('customInputs.'+label)" class="help is-danger">{{ errors.first('customInputs.'+label) }}</span>
+            </div>
+            <div v-if="type == 'email'">
+                <label>{{label}} <span v-if="required">*</span></label>
+                <input 
+                    v-if="!required" 
+                    :type="type" 
+                    v-model="theValue"
+                    :name="label"
+                    :placeholder="placeholder"
+                >
+                <input 
+                    v-if="required"  
+                    :type="type" 
+                    v-model="theValue"
+                    :name="label"
+                    :placeholder="placeholder"
+                    v-validate="'required|email'"
+                    :class="{'input': true, 'is-danger': errors.has('customInputs.'+label)}"
+                    :key="label+index"
+                >
+                <span v-if="required" v-show="errors.has('customInputs.'+label)" class="help is-danger">{{ errors.first('customInputs.'+label) }}</span>
+            </div>
+            <div v-if="type == 'separator'" class="separator">
+                <hr>
+            </div>
+            <div v-if="type == 'section-header'" class="section-header">
+                <h5>{{label}}</h5>
+            </div>
+        </div>
+    </script>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/what-input.js"></script>
+    <script src="js/vendor/foundation.js"></script>
+    <script src="js/app.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/vee-validate.js"></script>
+    <!-- <script src="js/vee-validate.min.js"></script> -->
+
+    <script src="js/components/custom-input.js"></script>
+    <script src="js/components/input-fields.js"></script>
+
+    <script src="js/forms.js"></script>
+
+</body>
+
+</html>

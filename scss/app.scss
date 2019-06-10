@@ -1,0 +1,134 @@
+
+$error: #c60f13;
+$white: #fff;
+
+
+@mixin flex($align: center, $justify: center) {
+    display: flex;
+    align-items: $align;
+    justify-content: $justify;
+}
+
+@mixin transition {
+    transition: 0.15s ease-in-out;
+}
+
+@mixin shadow() {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+@mixin radius() {
+    border-radius: 3px;
+}
+
+@mixin bubble() {
+    @include flex();
+    font-size: 14px;
+    position: absolute;
+    top: -10px;
+    left: 5px;
+
+    @include shadow;
+    @include radius;
+    padding: 5px 15px;
+    color: $white;
+    background-color: $error;
+    border-color: #f5c6cb;
+
+    &:after {
+        content: '';
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 10px solid $error;
+        position: absolute;
+        bottom: -10px;
+        left: 30px;
+    }
+}
+
+code{
+    display: block;
+    margin-bottom: 25px;
+}
+.input.is-danger{
+    border:1px solid $error;
+}
+.help.is-danger{
+    @include bubble();
+}
+
+.input-wrap{
+    position: relative;
+    margin-bottom:15px;
+    input{
+        margin:0 0 15px;
+    }
+
+    .button{
+        margin-bottom:0;
+    }
+}
+
+section{
+    margin:50px 0;
+}
+.hovering{
+    background:$error;
+}
+
+.remove-form-element{
+    ul{
+        list-style: none;
+        margin-left:0;
+    }
+    li{
+        padding:5px;
+        border:1px solid transparent;
+        margin: 5px 0;
+        cursor: pointer;
+
+        &:hover{
+            border:1px solid $error;
+        }
+    }
+
+}
+
+.form-element-list{
+
+    padding: 0;
+
+
+    ul{
+        margin: 0;
+    }
+    li{
+        @include flex(center,space-between);
+        margin: 10px 0;
+
+    }
+} 
+.direction-buttons{
+    .button{
+        margin: 0;
+        
+    }
+}
+
+
+
+
+//vue stuff
+[v-cloak] {
+    display: none;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+}
+
+.fade-enter, .fade-leave-to {
+    opacity: 0
+}
