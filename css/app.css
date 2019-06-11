@@ -1,6 +1,7 @@
 code {
   display: block;
   margin-bottom: 25px;
+  word-break: break-word;
 }
 
 .input.is-danger {
