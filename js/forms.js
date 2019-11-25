@@ -12,7 +12,7 @@ const dictionary = {
     },
 };
 
-VeeValidate.Validator.localize(dictionary);
+//VeeValidate.Validator.localize(dictionary);
 Vue.use(VeeValidate);
 
 var app = new Vue({
